@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended : false }));
 // create
 app.post('/insert', (request, response) => 
 {
-
+    console.log(request.body);
 }); 
 
 // read
