@@ -1,12 +1,23 @@
 const express = require('express');
+
+// cross domain functionality
 const cors = require('cors');
+
+// use to access env file which contains hostname and port that the app will use
 const dotenv = require('dotenv');
+dotenv.config();
+
+const dbService = require('./dbService');
 
 const app = express();
-dotenv.config();
 app.use(cors());
+
+// need for processing post and put process
+
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
+
+
 
 // create
 app.post('/insert', (request, response) => 
@@ -17,10 +28,21 @@ app.post('/insert', (request, response) =>
 // read
 app.get('/getALL', (request, response) => 
 {
-    console.log('test');
+    const db = dbService.getDbServiceInstance();
+
+    const result = db.getAllData();
+
+    result
+    .then(data => response.json({data : data}))
+    .catch(err => console.log(err));
 }); 
 
 // update
 
 
 // delete
+
+app.listen(process.env.PORT, () => 
+{
+    console.log("Application is running on this server...");
+});
