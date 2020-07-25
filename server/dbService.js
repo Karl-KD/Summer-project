@@ -73,8 +73,11 @@ class DbService{
                 })
             });
 
-            console.log(insertId);
-            //return response;
+            return {
+                id : insertId,
+                name : name,
+                dateAdded : dateAdded
+           };
 
         } catch(err)
         {
