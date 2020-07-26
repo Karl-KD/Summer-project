@@ -84,6 +84,32 @@ class DbService{
             console.log(err);
         }
     }
+    
+    async deleteRowbyID(id)
+    {
+        try
+        {
+            id = parseInt(id, 10);
+
+            const response = await new Promise((resolve, reject) => 
+            {
+                const query = "DELETE FROM names WHERE ID = ?";
+
+                connection.query(query, [id], (err, result) =>
+                {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.affectedRows);
+                })
+            });
+
+           return response === 1 ? true : false;
+        
+        } catch(err)
+        {
+            console.log(err);
+            return false;
+        }
+    }
 }
 
 module.exports = DbService;

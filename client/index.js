@@ -5,6 +5,40 @@ document.addEventListener('DOMContentLoaded', function()
     .then(data => loadHTMLTable(data['data']));
 });
 
+document.querySelector('table tbody').addEventListener('click', function(event)
+{
+    if(event.target.className === "delete-row-btn")
+    {
+        deleteRowbyID(event.target.dataset.id);
+    }
+
+    if(event.target.className === "edit-row-btn")
+    {
+        editRowbyID(event.target.dataset.id);
+    }
+});
+
+function deleteRowbyID(id)
+{
+    fetch('http://localhost:5000/delete/' + id, 
+    {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => 
+        {
+            if(data.success)
+            {
+                location.reload();
+            }
+        });
+}
+
+function editRowbyID(id)
+{
+    const updateSection = document.querySelector('#update-row');
+    updateSection.hidden = false;
+}
 
 const addBtn = document.querySelector('#add-name-btn');
 
@@ -45,7 +79,7 @@ function insertRowIntoTable(data)
     }
     
     tableHTML += `<td><button class="delete-row-btn" data-id=${data.id}>Delete</td>`;
-    tableHTML += `<td><buton class="edit-row-btn" data-id=${data.id}>Edit</td>`;
+    tableHTML += `<td><button class="edit-row-btn" data-id=${data.id}>Edit</td>`;
 
 
     tableHTML += "</tr>";
@@ -80,7 +114,7 @@ function loadHTMLTable(data)
         tableHTML += `<td>${Name}</td>`;
         tableHTML += `<td>${new Date(Date_Added).toLocaleString()}</td>`;
         tableHTML += `<td><button class="delete-row-btn" data-id=${ID}>Delete</td>`;
-        tableHTML += `<td><buton class="edit-row-btn" data-id=${ID}>Edit</td>`;
+        tableHTML += `<td><button class="edit-row-btn" data-id=${ID}>Edit</td>`;
         tableHTML += "</tr>";
     });
 

@@ -48,6 +48,20 @@ app.get('/getALL', (request, response) =>
 
 
 // delete
+app.delete('/delete/:id', (request, response) =>
+{
+    const { id } = request.params;
+
+    const db = dbService.getDbServiceInstance();
+
+    const result = db.deleteRowbyID(id);
+
+    result
+    .then(data => response.json({success: data}))
+    .catch(err => console.log(err));
+})
+
+
 
 app.listen(process.env.PORT, () => 
 {
