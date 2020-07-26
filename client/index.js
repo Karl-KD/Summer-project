@@ -12,11 +12,23 @@ document.querySelector('table tbody').addEventListener('click', function(event)
         deleteRowbyID(event.target.dataset.id);
     }
 
-    if(event.target.className === "edit-row-btn")
+    if (event.target.className === "edit-row-btn") 
     {
-        editRowbyID(event.target.dataset.id);
+        handleEditRow(event.target.dataset.id);
     }
 });
+
+const updateBtn = document.querySelector('#update-row-btn');
+const srchBtn = document.querySelector('#search-btn');
+
+srchBtn.onclick = function()
+{
+    const searchValue = document.querySelector('#search').value;
+
+    fetch('http://localhost:5000/search/' + searchValue)
+    .then(response => response.json())
+    .then(data => loadHTMLTable(data['data']));
+}
 
 function deleteRowbyID(id)
 {
@@ -34,10 +46,37 @@ function deleteRowbyID(id)
         });
 }
 
-function editRowbyID(id)
+function handleEditRow(id) 
 {
     const updateSection = document.querySelector('#update-row');
     updateSection.hidden = false;
+    document.querySelector('#update-name-input').dataset.id = id;
+}
+
+updateBtn.onclick = function() 
+{
+    const updateNameInput = document.querySelector('#update-name-input');
+
+    console.log(updateNameInput);
+
+    fetch('http://localhost:5000/update', 
+    {
+        method: 'PATCH',
+        headers: {'Content-type' : 'application/json'},
+        body: JSON.stringify(
+            {
+                id: updateNameInput.dataset.id,
+                name: updateNameInput.value
+            })
+    })
+    .then(response => response.json())
+    .then(data => 
+        {
+            if (data.success) 
+            {
+                location.reload();
+            }
+        })
 }
 
 const addBtn = document.querySelector('#add-name-btn');
